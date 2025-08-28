@@ -7,41 +7,89 @@ trigger:
 - master
 
 pool:
-  name: Default
+  name: default
+    
+stages:
+# --------- CI Stage -------------
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: Build
+    displayName: 'Build Node.js + React'
+    steps:
+      # Install Node.js
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '22.x'
+        displayName: 'Install Node.js'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSource: 'spec'
-    versionSpec: '22.x'
-  displayName: 'Install Node.js'
+      # Install server dependencies
+      - task: Npm@1
+        inputs:
+          command: 'install'
+          workingDir: 'server'
 
-- task: Npm@1
-  inputs:
-    command: 'install'
-    workingDir: 'server'
+      # Install client dependencies
+      - task: Npm@1
+        inputs:
+          command: 'install'
+          workingDir: 'client'
 
-- task: Npm@1
-  inputs:
-    command: 'install'
-    workingDir: 'client'
+      # Build React frontend
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          workingDir: 'client'
+          customCommand: 'run build'
 
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    workingDir: 'client'
-    customCommand: 'run build'
+      # Copy files for deployment
+      - task: CopyFiles@2
+        inputs:
+          Contents: |
+            server/**
+            client/build/**
+          TargetFolder: $(Build.ArtifactStagingDirectory)
 
-- task: CopyFiles@2
-  inputs:
-    Contents: |
-      client/public/**
-      client/src/**
-      server/**
-    TargetFolder: $(Build.ArtifactStagingDirectory)
+      # Publish build artifacts
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'release'
+          publishLocation: 'Container'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'release'
-    publishLocation: 'Container'
+# --------- CD Stage -------------
+- stage: Deploy
+  displayName: 'Deploy Stage'
+  dependsOn: Build
+  jobs:
+  - deployment: DeployWebApp
+    displayName: 'Deploy MERN App to Azure Web App'
+    environment: 'dev'   # you can create Dev/Prod environments in Azure DevOps
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            # Download artifacts from CI stage
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                buildType: 'current'
+                artifactName: 'release'
+                downloadPath: '$(System.ArtifactsDirectory)'
+
+            # Deploy Node.js backend + React frontend to Azure Web App
+
+          
+            - task: AzureWebApp@1
+              inputs:
+                azureSubscription: 'Azure subscription 1(8351da09-191f-4adb-ba29-20ac21c7593f)'
+                appType: 'webAppLinux'
+                appName: 'tiktokwebapp'
+                deployToSlotOrASE: true
+                resourceGroupName: 'tiktokweb'
+                slotName: 'production'
+                package: '$(System.ArtifactsDirectory)'
+                runtimeStack: 'NODE|22-lts'
+
+
+
+
