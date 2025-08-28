@@ -86,7 +86,7 @@ stages:
                 deployToSlotOrASE: true
                 ResourceGroupName: 'tiktokweb'
                 SlotName: 'production'
-                packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+                packageForLinux: '$(System.ArtifactsDirectory)'
 
             
 
