@@ -26,10 +26,24 @@ steps:
     command: 'install'
     workingDir: 'client'
 
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: 'server'
+    customCommand: 'run start'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: 'client'
+    customCommand: 'start'
 
 - task: CopyFiles@2
   inputs:
-    Contents: '**'
+    Contents: |
+      client/public/**
+      client/src/**
+      server/**
     TargetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
