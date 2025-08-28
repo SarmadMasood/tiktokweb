@@ -26,11 +26,7 @@ steps:
     command: 'install'
     workingDir: 'client'
 
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    workingDir: 'server'
-    customCommand: 'npm run start'
+
 
 - task: Npm@1
   inputs:
