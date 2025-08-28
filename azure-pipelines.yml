@@ -77,18 +77,18 @@ stages:
                 downloadPath: '$(System.ArtifactsDirectory)'
 
             # Deploy Node.js backend + React frontend to Azure Web App
-
-          
-            - task: AzureWebApp@1
+            - task: AzureRmWebAppDeployment@5
               inputs:
+                ConnectionType: 'AzureRM'
                 azureSubscription: 'Azure subscription 1(8351da09-191f-4adb-ba29-20ac21c7593f)'
-                appType: 'webAppLinux'
-                appName: 'tiktokwebapp'
+                appType: 'webApp'
+                WebAppName: 'tiktokwebwin'
                 deployToSlotOrASE: true
-                resourceGroupName: 'tiktokweb'
-                slotName: 'production'
-                package: '$(System.ArtifactsDirectory)'
-                runtimeStack: 'NODE|22-lts'
+                ResourceGroupName: 'tiktokweb'
+                SlotName: 'production'
+                packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+            
 
 
 
