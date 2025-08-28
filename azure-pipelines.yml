@@ -29,14 +29,8 @@ steps:
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: 'server'
-    customCommand: 'run start'
-
-- task: Npm@1
-  inputs:
-    command: 'custom'
     workingDir: 'client'
-    customCommand: 'start'
+    customCommand: 'run build'
 
 - task: CopyFiles@2
   inputs:
