@@ -17,13 +17,11 @@ steps:
   displayName: 'Install Node.js'
 
 - task: Npm@1
-displayName: 'Installing Modules in Server'
   inputs:
     command: 'install'
     workingDir: 'server'
 
 - task: Npm@1
-displayName: 'Installing Modules in Client'
   inputs:
     command: 'install'
     workingDir: 'client'
