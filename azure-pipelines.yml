@@ -27,13 +27,6 @@ steps:
     workingDir: 'client'
 
 
-
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    workingDir: 'client'
-    customCommand: 'npm start'
-
 - task: CopyFiles@2
   inputs:
     Contents: '**'
