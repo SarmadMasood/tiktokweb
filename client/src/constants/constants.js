@@ -1,1 +1,1 @@
-export const serverURL = "http://localhost:5000/"
+export const serverURL = "https://tiktokwebapp-e6c8dvhca9f3hrfq.uksouth-01.azurewebsites.net"
