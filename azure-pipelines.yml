@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: default
+  name: 'Default'
     
 stages:
 # --------- CI Stage -------------
@@ -81,12 +81,12 @@ stages:
               inputs:
                 ConnectionType: 'AzureRM'
                 azureSubscription: 'Azure subscription 1(8351da09-191f-4adb-ba29-20ac21c7593f)'
-                appType: 'webApp'
-                WebAppName: 'tiktokwebwin'
-                deployToSlotOrASE: true
-                ResourceGroupName: 'tiktokweb'
-                SlotName: 'production'
+                appType: 'webAppLinux'
+                WebAppName: 'tiktokwebapp'
                 packageForLinux: '$(System.ArtifactsDirectory)'
+                RuntimeStack: 'NODE|22-lts'
+                StartupCommand: 'node index.js'
+                DeploymentTypeLinux: 'oneDeploy'
 
             
 
