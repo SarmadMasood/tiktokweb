@@ -85,7 +85,6 @@ stages:
                 WebAppName: 'tiktokwebapp'
                 packageForLinux: '$(System.ArtifactsDirectory)'
                 RuntimeStack: 'NODE|22-lts'
-                StartupCommand: 'node index.js'
                 DeploymentTypeLinux: 'oneDeploy'
 
             
